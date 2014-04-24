@@ -10,21 +10,28 @@ var stringifyJSON = function(obj) {
  	 }
  	 else if (typeof(obj) === 'string')
   		return "\"" + obj + "\"";
-	 else if (Object.prototype.toString.call(obj) == '[object Function]')
- 	 	return null;
+	 else if (Object.prototype.toString.call(obj) === '[object Function]')
+ 	 	return undefined;
  	 else if (obj === null)
-  		return 'null'
+  		return 'null';
 
   // Arrays
-  else if (Object.prototype.toString.call(obj) == '[object Array]'){
-  	var arr = []
+  else if (Object.prototype.toString.call(obj) === '[object Array]'){
+  	var arr = [];
   	for (var i = 0; i < obj.length; i++)
-  		arr.push(stringifyJSON(obj[i]))
+  		arr.push(stringifyJSON(obj[i]));
   	return "[" + arr.join(",") + "]";
   }
   // Objects
-  else if (typeof(obj) === 'object')
-  	return "{" + "}"
+  else if (typeof(obj) === 'object'){
+  	var arr = [];
+  	for (var key in obj){
+  		if (!(Object.prototype.toString.call(obj[key]) === '[object Function]' || typeof(obj[key]) === 'undefined')){
+  		arr.push('"' + key + '\":' + stringifyJSON(obj[key]));
+  		}
+  	}
+  	return "{" + arr.join(",") + "}"
+  }
 
-  return 'wut'
+  return undefined;
 };
